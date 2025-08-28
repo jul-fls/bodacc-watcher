@@ -1,0 +1,17 @@
+services:
+  bodacc-watcher:
+    image: ghcr.io/jul-fls/bodacc-watcher/app:latest
+    container_name: bodacc-watcher
+    restart: unless-stopped
+    environment:
+      # Obligatoires
+      DISCORD_WEBHOOK_URL: ${DISCORD_WEBHOOK_URL}
+      COMPANIES: ${COMPANIES}
+
+      # Optionnelles
+      POLL_INTERVAL_MS: ${POLL_INTERVAL_MS:-300000}
+      MAX_RESULTS_PER_COMPANY: ${MAX_RESULTS_PER_COMPANY:-10}
+      STATE_FILE_PATH: /data/bodacc_seen_multi.json
+    volumes:
+      - ./data:/data
+    # Pas de ports à exposer : le service agit en "worker" (sortant uniquement)
