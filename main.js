@@ -95,11 +95,18 @@ async function postToDiscord(embeds) {
   // Discord autorise 10 embeds / message
   for (let i = 0; i < embeds.length; i += 10) {
     const chunk = embeds.slice(i, i + 10);
+    const payload = {
+      username: "BODACC Watcher", // custom sender name
+      avatar_url: "https://static.data.gouv.fr/images/2015-07-01/d24a62fce1194aa18e662d696c2faa7b/nbouton_bodacc-500.png", // Bodacc logo
+      embeds: chunk
+    };
+
     const res = await fetch(DISCORD_WEBHOOK_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ embeds: chunk }),
+      body: JSON.stringify(payload),
     });
+
     if (!res.ok) {
       const t = await res.text().catch(() => "");
       throw new Error(`Discord webhook error: ${res.status} ${res.statusText} – ${t}`);
